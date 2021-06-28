@@ -21,7 +21,9 @@ def db_init():
 
     #check for a valid license 
 def license_check():
-     dl = getrfid()
+     print("Waiting  for license")
+     dl = getrfid().strip()
+     print("license scanned is ... "+dl)
      vid = open("node/vid").read()
      url = "https://virt-api.herokuapp.com/api/license/retrieve"
      body = {"vid":vid,"dl":dl }
