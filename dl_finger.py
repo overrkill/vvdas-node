@@ -1,17 +1,10 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
-"""
-PyFingerprint
-Copyright (C) 2015 Bastian Raschke <bastian.raschke@posteo.de>
-All rights reserved.
-
-"""
 
 import time
 from pyfingerprint.pyfingerprint import PyFingerprint
-from pyfingerprint.pyfingerprint import FINGERPRINT_CHARBUFFER1
-from pyfingerprint.pyfingerprint import FINGERPRINT_CHARBUFFER2
+FINGERPRINT_CHARBUFFER1 = 0x01
+FINGERPRINT_CHARBUFFER2 = 0x02
 
 
 ## Enrolls new finger
@@ -70,12 +63,17 @@ try:
     ## Creates a template
     f.createTemplate()
 
-    print(f.downloadCharacteristics())
-
+    print("The fingerprint registered is ...")
+    print("---------------------------------")
+    print("")
+    print(" ".join(list(map(str,f.downloadCharacteristics()))))
+    print("")
+    print("---------------------------------")
+    print("(copy the fingerprint)")
     ## Saves template at new position number
-    positionNumber = f.storeTemplate()
-    print('Finger enrolled successfully!')
-    print('New template position #' + str(positionNumber))
+    # positionNumber = f.storeTemplate()
+    # print('Finger enrolled successfully!')
+    # print('New template position #' + str(positionNumber))
 
 except Exception as e:
     print('Operation failed!')

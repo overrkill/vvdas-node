@@ -31,10 +31,7 @@ def license_check():
 
     # check for a valid fingerprint
 def scan_finger(fingerprint):
-    if  get_finger() == fingerprint:
-        return "1"
-    else:
-        return "0"
+    return get_finger(fingerprint)
 
     #go through document check
 def document_check():
