@@ -1,4 +1,5 @@
 # Imports
+import base64
 from decrypt import decrypt
 from rfid import getrfid
 from finger import get_finger
@@ -33,7 +34,13 @@ def license_check():
 
     # check for a valid fingerprint
 def scan_finger(fingerprint):
-    return get_finger(fingerprint)
+    url = "https://virt-api.herokuapp.com/api/fingerprint/query"
+    body = {"hash":fingerprint }
+    x = requests.post(url,body)
+    finger = x.json()[0]["finger"]
+    finger = list(map(int,str(base64.b64decode(finger),'utf-8').split()))
+    print(finger)
+    return get_finger(finger)
 
     #go through document check
 def document_check():
