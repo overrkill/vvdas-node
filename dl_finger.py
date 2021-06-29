@@ -2,6 +2,7 @@
 
 
 import time
+import base64
 from pyfingerprint.pyfingerprint import PyFingerprint
 FINGERPRINT_CHARBUFFER1 = 0x01
 FINGERPRINT_CHARBUFFER2 = 0x02
@@ -66,7 +67,7 @@ try:
     print("The fingerprint registered is ...")
     print("---------------------------------")
     print("")
-    print(" ".join(list(map(str,f.downloadCharacteristics()))))
+    print(str(base64.b64encode(" ".join(list(map(str,f.downloadCharacteristics()))).encode('utf-8')),'utf-8'))
     print("")
     print("---------------------------------")
     print("(copy the fingerprint)")
