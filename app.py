@@ -38,7 +38,7 @@ def verify_documents():
         1:"PUC not found",
         2:"Insurance not found"
     }
-
+    add_log("Document Check",status.get(StatusCode,"Unexpected error"))
     return status.get(StatusCode,"Unexpected error")
     # get all docs
 @app.route("/get_all_docs")
