@@ -34,14 +34,20 @@ def license_check():
      return obj
 
     # check for a valid fingerprint
-def scan_finger(fingerprint):
+def scan_finger(fingerprint,dl):
     url = "https://virt-api.herokuapp.com/api/fingerprint/query"
     body = {"hash":fingerprint }
     x = requests.post(url,body)
     finger = x.json()[0]["finger"]
     finger = list(map(int,str(base64.b64decode(finger),'utf-8').split()))
     print(finger)
-    return get_finger(finger)
+    accuracy =  get_finger(finger)
+    if accuracy > 0:
+        add_log("Fingerprint auth "+str(dl),"Success")
+        add_log("drive",str(dl))
+    else:
+        add_log("Fingerprint auth "+str(dl),"failed")
+    return accuracy
 
     #go through document check
 def document_check():

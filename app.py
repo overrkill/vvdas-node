@@ -24,7 +24,7 @@ def verify_fingerprint():
     data = request.get_json()
     print(data)
     if "fingerprint" in data:
-        return str(scan_finger(data["fingerprint"]))
+        return str(scan_finger(data["fingerprint"],data["dl"]))
     return "0"
 
 # Document 
