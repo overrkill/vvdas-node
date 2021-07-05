@@ -34,7 +34,7 @@ def license_check():
      return obj
 
     # check for a valid fingerprint
-def scan_finger(fingerprint,dl):
+def scan_finger(fingerprint,name,dl):
     url = "https://virt-api.herokuapp.com/api/fingerprint/query"
     body = {"hash":fingerprint }
     x = requests.post(url,body)
@@ -43,8 +43,9 @@ def scan_finger(fingerprint,dl):
     print(finger)
     accuracy =  get_finger(finger)
     if accuracy > 0:
-        add_log("Fingerprint auth "+str(dl),"Success")
-        add_log("drive",str(dl))
+        add_log("Fingerprint auth "+str(name),"Success")
+        add_log("drive",str(name))
+        print(add_driver(str(name),str(dl)))
     else:
         add_log("Fingerprint auth "+str(dl),"failed")
     return accuracy
@@ -74,6 +75,7 @@ def document_check():
 # Driver related stuffs 
 
 def get_all_drivers():
+    print("drivers")
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
@@ -102,6 +104,14 @@ def get_logs():
     rows = cur.fetchall()
     return rows
 
+def get_last_driver():
+    conn = get_connection()
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    # cur.execute('insert into drivers (name,dl) values(?,?)',("abhi","1231231234"))
+    cur.execute('select * from logs where type="drive" order by time desc limit 1')
+    rows = cur.fetchall()
+    return rows
     # add a new log with typw and desc
 def add_log(typ:str,desc:str):
     conn = get_connection()
@@ -128,7 +138,12 @@ def get_static_owner_details():
 
 # Documents
     # Add Document
-def add_doc(typ,id,valid):
+def add_doc(typ,id):
+    url = "https://virt-api.herokuapp.com/api/document/verify"
+    body = {"id": id }
+    x = requests.post(url,body)
+    valid = x.text
+    print(valid)
     conn = get_connection()
     cur = conn.cursor()
     print(cur.execute("replace into documents values(?,?,?)",(id,typ,valid)).lastrowid)

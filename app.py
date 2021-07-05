@@ -3,7 +3,7 @@ from sqlite3.dbapi2 import Date
 
 from flask import Flask,jsonify,request
 from flask_cors import CORS
-from utils import add_doc, add_log, db_init, document_check, get_all_docs, get_all_drivers, get_logs, get_static_owner_details, get_static_vehicle_details, license_check, scan_finger 
+from utils import add_doc, add_log, db_init, document_check, get_all_docs, get_all_drivers, get_logs, get_static_owner_details, get_static_vehicle_details, license_check, scan_finger ,get_last_driver
 
 app =  Flask(__name__)
 cors = CORS(app)
@@ -24,7 +24,7 @@ def verify_fingerprint():
     data = request.get_json()
     print(data)
     if "fingerprint" in data:
-        return str(scan_finger(data["fingerprint"],data["dl"]))
+        return str(scan_finger(data["fingerprint"],data["name"],data["dl"]))
     return "0"
 
 # Document 
@@ -71,14 +71,16 @@ def get_all_logs():
 def add_new_log(typ,desc):
     return add_log(typ,desc)
 
-
+@app.route("/last_driver")
+def gld():
+    return jsonify({"driver":[dict(i) for i in get_last_driver()]})
 #Document add 
 
 @app.route("/add_document" ,methods=['POST'])
 def add_new_document():
     dt = request.get_json()
     if "type" in dt and "id" in dt:
-        return add_doc(dt["type"],dt["id"], Date(2000,9,12))    
+        return add_doc(dt["type"],dt["id"])    
     else:
         return "Bad request"
 if __name__ == "__main__":
